@@ -89,9 +89,9 @@ vec3 hsv2rgb(vec3 c) {
 
 void main() {
   vec2 uv = vUv;
-  float aspect = uResolution.x / max(uResolution.y, 1.0);
-  uv = (uv - 0.5) * vec2(aspect, 1.0) + 0.5;
-  float hue = abs(snoise(vec3(uv * uFrequency, uTime * uSpeed)));
+  float minDim = min(uResolution.x, max(uResolution.y, 1.0));
+  vec2 st = (uv - 0.5) * (uResolution / minDim) + 0.5;
+  float hue = abs(snoise(vec3(st * uFrequency, uTime * uSpeed)));
   vec3 rainbowColor = hsv2rgb(vec3(hue, 1.0, uValue));
   fragColor = vec4(rainbowColor, 1.0);
 }`;
@@ -279,6 +279,27 @@ export default function DottedBg2({
     paletteBias = -3,
     style,
 }) {
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => {
+            const mobile =
+                typeof window !== "undefined" &&
+                (window.innerWidth <= 768 ||
+                    window.innerHeight <= 768 ||
+                    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                        navigator.userAgent
+                    ));
+            setIsMobile(mobile);
+        };
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
+    const effectiveCellSize = isMobile ? Math.max(cellSize * 4, 12) : cellSize;
+    const effectivePaletteBias = isMobile ? Math.max(paletteBias, 0) : paletteBias;
+
     const paletteColors =
         Array.isArray(colors) && colors.length > 0 ? colors : DEFAULT_COLORS;
     const effPaletteCount = Math.min(
@@ -434,9 +455,9 @@ export default function DottedBg2({
                 uPaletteCount: { value: effPaletteCount },
                 uPalette: { value: palette.rgb },
                 uPaletteAlpha: { value: palette.alpha },
-                uCellSize: { value: mapCellSizeUiToShader(cellSize) },
+                uCellSize: { value: mapCellSizeUiToShader(effectiveCellSize) },
                 uGamma: { value: mapGammaUiToShader(gamma) },
-                uPaletteBias: { value: mapPaletteBiasUiToShader(paletteBias) },
+                uPaletteBias: { value: mapPaletteBiasUiToShader(effectivePaletteBias) },
             },
         });
         dotProgramRef.current = dotProgram;
@@ -525,9 +546,9 @@ export default function DottedBg2({
             dot.uniforms.uPaletteCount.value = effPaletteCount;
             dot.uniforms.uPalette.value = palette.rgb;
             dot.uniforms.uPaletteAlpha.value = palette.alpha;
-            dot.uniforms.uCellSize.value = mapCellSizeUiToShader(cellSize);
+            dot.uniforms.uCellSize.value = mapCellSizeUiToShader(effectiveCellSize);
             dot.uniforms.uGamma.value = mapGammaUiToShader(gamma);
-            dot.uniforms.uPaletteBias.value = mapPaletteBiasUiToShader(paletteBias);
+            dot.uniforms.uPaletteBias.value = mapPaletteBiasUiToShader(effectivePaletteBias);
         }
         if (rendererRef.current && glRef.current) {
             const gl = glRef.current;
@@ -545,9 +566,9 @@ export default function DottedBg2({
         effPaletteCount,
         bgColor,
         paletteKey,
-        cellSize,
+        effectiveCellSize,
         gamma,
-        paletteBias,
+        effectivePaletteBias,
     ]);
 
     useEffect(() => {
