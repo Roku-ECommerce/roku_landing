@@ -5,7 +5,7 @@ import DottedBackground from "./components/ascibg";
 
 export default function App() {
   return (
-    <main style={{ width: "100vw", height: "100vh", position: "relative", overflow: "hidden" }}>
+    <main style={{ width: "100vw", minHeight: "100vh", height: "100dvh", position: "relative", overflow: "hidden" }}>
 
       {/* ARKA PLAN KATMANI */}
 

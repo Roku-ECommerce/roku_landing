@@ -109,7 +109,7 @@ void main() {
 }`;
 
 const dotFragmentShader = `#version 300 es
-precision highp float;
+precision mediump float;
 uniform vec2 uResolution;
 uniform sampler2D uTexture;
 uniform int uPaletteCount;
@@ -393,15 +393,36 @@ export default function DottedBackground({
         const container = containerRef.current;
         if (!container) return;
 
+        const isMobile = typeof window !== "undefined" && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         const renderer = new Renderer({
-            dpr: Math.min(window.devicePixelRatio || 1, 2),
+            dpr: isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2),
             alpha: true,
             premultipliedAlpha: false,
         });
         const gl = renderer.gl;
+        if (gl && gl.canvas) {
+            gl.canvas.style.width = "100%";
+            gl.canvas.style.height = "100%";
+            gl.canvas.style.display = "block";
+            gl.canvas.style.position = "absolute";
+            gl.canvas.style.top = "0";
+            gl.canvas.style.left = "0";
+        }
         container.appendChild(gl.canvas);
         rendererRef.current = renderer;
         glRef.current = gl;
+
+        const handleContextLost = (e) => {
+            e.preventDefault();
+            if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+        };
+        const handleContextRestored = () => {
+            renderOnce();
+        };
+        if (gl.canvas) {
+            gl.canvas.addEventListener("webglcontextlost", handleContextLost, false);
+            gl.canvas.addEventListener("webglcontextrestored", handleContextRestored, false);
+        }
 
         const camera = new Camera(gl, { near: 0.1, far: 100 });
         camera.position.set(0, 0, 3);
@@ -410,8 +431,9 @@ export default function DottedBackground({
         const doResize = () => {
             const width = container.clientWidth || window.innerWidth;
             const height = container.clientHeight || window.innerHeight;
+            if (width === 0 || height === 0) return;
             renderer.setSize(width, height);
-            camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
+            camera.perspective({ aspect: gl.canvas.width / Math.max(gl.canvas.height, 1) });
             if (renderTargetRef.current && renderTargetRef.current.setSize) {
                 renderTargetRef.current.setSize(
                     gl.canvas.width,
