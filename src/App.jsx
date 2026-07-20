@@ -5,11 +5,11 @@ import DottedBackground from "./components/ascibg";
 
 export default function App() {
   return (
-    <main style={{ width: "100vw", minHeight: "100vh", height: "100dvh", position: "relative", overflow: "hidden" }}>
+    <main style={{ width: "100vw", minHeight: "100vh", height: "100dvh", position: "relative", overflow: "hidden", backgroundColor: "#000000" }}>
 
-      {/* ARKA PLAN KATMANI */}
+      {/* ARKA PLAN KATMANI (Mobilde Gizli - Sadece Masaüstünde WebGL) */}
 
-      <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: -1 }}>
+      <div className="hidden md:block" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
         <DottedBg2
           bgColor="#000000ff"
           colors={["#ff0000ff"]}
