@@ -1,6 +1,6 @@
 import React from "react";
 import DottedBg2 from "./components/DottedBg2";
-import logo from "./assets/FullLogo.png";
+import logo from "./assets/rowktamlogo.svg";
 import DottedBackground from "./components/ascibg";
 
 export default function App() {
@@ -90,7 +90,7 @@ export default function App() {
         }}
       >
         <a
-          href="https://www.instagram.com/roku.sw/"
+          href="https://www.instagram.com/rowktr/"
           target="_blank"
           rel="noopener noreferrer"
           style={{
