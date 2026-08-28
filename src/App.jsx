@@ -1,130 +1,131 @@
 import React from "react";
-import DottedBg2 from "./components/DottedBg2";
-import logo from "./assets/rowktamlogo.svg";
-import DottedBackground from "./components/ascibg";
+import CountdownTimer from "./components/CountdownTimer";
+import rowkLoginVideo from "./assets/rowklogin.mp4";
+import rowkLogo from "./assets/rowktamlogo.svg";
 
 export default function App() {
   return (
-    <main style={{ width: "100vw", minHeight: "100vh", height: "100dvh", position: "relative", overflow: "hidden", backgroundColor: "#000000" }}>
-
-      {/* ARKA PLAN KATMANI (Mobilde Gizli - Sadece Masaüstünde WebGL) */}
-
-      <div className="hidden md:block" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
-        <DottedBg2
-          bgColor="#000000ff"
-          colors={["#ff0000ff"]}
-          frequency={2}
-          speed={3}
-          cellSize={2}
-          gamma={6}
-          paletteBias={-4}
-        />
-      </div>
-
-      {/* <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
-        <DottedBackground
-          useGlyphAtlas={true} // Karakter render etme modunu açar
-          characters="ROKUrokurokuRoku" // ASCII yoğunluk karakterleri (boşluktan en koyuya)
-          fontFamily="monospace" // ASCII için en uygun yazı tipi
-          fontSizePx={32} // Karakter boyutu
-          cellSize={20} // Hücre boyutu (font boyutundan biraz daha geniş olmalı)
-          bgColor="#ffffffff" // Çok koyu gri/siyah arka plan
-          colors={["#ff0000ff", "#000000ff", "#ffffffff"]} // Terminal/Matrix yeşili tonları
-          frequency={3} // Dalgaların sıklığı
-          speed={4} // Hareket hızı
-          gamma={3}
-          paletteBias={2}
-        />
-      </div> */}
-      {/* SİTENİN ASIL İÇERİĞİ (ÜST KATMAN) */}
+    <main
+      style={{
+        width: "100vw",
+        minHeight: "100vh",
+        backgroundColor: "#ffffff",
+        color: "#000000",
+        position: "relative",
+        overflowX: "hidden",
+      }}
+      className="min-h-screen w-full flex flex-col lg:flex-row"
+    >
+      {/* Sol Kısım: Beyaz Arka Plan & Büyük Dikey Geri Sayım Sayacı */}
       <div
-        className="relative z-10 flex flex-col md:flex-row justify-between items-center h-full w-full max-w-7xl mx-auto px-10 py-10 md:py-20 gap-10 md:gap-20 box-border"
+        className="w-full lg:w-1/2 flex flex-col justify-between px-6 sm:px-12 lg:pl-12 lg:pr-8 py-8 lg:py-12 box-border z-10 order-2 lg:order-1 min-h-[60vh] lg:min-h-screen"
       >
-        {/* Sol Taraf: COMING SOON Yazısı */}
-        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left w-full order-2 md:order-1">
-          <h1
-            style={{
-              fontSize: "clamp(4.5rem, 10vw, 7.5rem)",
-              color: "white",
-              fontWeight: "900",
-              letterSpacing: "0.02em",
-              margin: 0,
-              padding: 0,
-              textTransform: "uppercase",
-              fontFamily: "'Source Code Pro', monospace",
-              lineHeight: "0.95"
-            }}
-          >
-            COMING
-            <br />
-            SOON.
-          </h1>
+        {/* Üst / Orta: Sayaç */}
+        <div className="my-auto flex flex-col items-start w-full">
+          <CountdownTimer />
         </div>
 
-        {/* Sağ Taraf: Roku Logo */}
-        <div className="flex-1 flex justify-center md:justify-end items-center w-full order-1 md:order-2">
-          <img
-            src={logo}
-            alt="Roku Logo"
+        {/* Alt Kısım: Instagram Logosu + Coming Soon + ROWK Logosu */}
+        <div
+          style={{
+            paddingTop: "24px",
+            display: "flex",
+            alignItems: "center",
+            gap: "clamp(12px, 2.5vw, 24px)",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* Instagram Logosu */}
+          <a
+            href="https://www.instagram.com/rowktr/"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              maxWidth: "clamp(440px, 45vw, 600px)",
-              width: "100%",
-              height: "auto",
-              display: "block"
+              color: "#000000",
+              transition: "opacity 0.2s ease, transform 0.2s ease",
+              opacity: 0.8,
+              display: "inline-flex",
+              alignItems: "center",
+              marginRight: "14px"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = "1";
+              e.currentTarget.style.transform = "scale(1.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = "0.8";
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+          >
+            <svg
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+          </a>
+
+          {/* Coming Soon Metni */}
+          <span
+            style={{
+              fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
+              fontSize: "clamp(1rem, 1.6vw, 1.35rem)",
+              fontWeight: "900",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "#000000",
+              lineHeight: "1",
+            }}
+          >
+            COMING SOON.
+          </span>
+
+          {/* ROWK Logo */}
+          <img
+            src={rowkLogo}
+            alt="ROWK"
+            style={{
+              height: "clamp(26px, 3.5vw, 38px)",
+              width: "auto",
+              display: "block",
             }}
           />
         </div>
       </div>
 
-      {/* Alt Orta Kısım: Instagram Logosu */}
+      {/* Sağ Kısım: rowklogin.mp4 (Tam Ekran Kaplayan Video) */}
       <div
+        className="w-full lg:w-1/2 h-[50vh] lg:h-screen lg:min-h-screen relative overflow-hidden order-1 lg:order-2"
         style={{
-          position: "absolute",
-          bottom: "32px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 50,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
+          backgroundColor: "#000000",
         }}
       >
-        <a
-          href="https://www.instagram.com/rowktr/"
-          target="_blank"
-          rel="noopener noreferrer"
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
           style={{
-            color: "white",
-            transition: "opacity 0.2s ease, transform 0.2s ease",
-            opacity: 0.65,
-            display: "inline-flex"
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = "1";
-            e.currentTarget.style.transform = "scale(1.15)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = "0.65";
-            e.currentTarget.style.transform = "scale(1)";
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
           }}
         >
-          <svg
-            width="56"
-            height="56"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-          </svg>
-        </a>
+          <source src={rowkLoginVideo} type="video/mp4" />
+        </video>
       </div>
-
     </main>
   );
 }
