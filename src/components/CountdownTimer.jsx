@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 
-// Pazartesiyi Salıya bağlayan gece 00:00:00 (Salı 00:00) hedef zamanı
+// Perşembeyi Cumaya bağlayan gece 00:00:00 (Cuma 00:00) hedef zamanı
 function getNextLaunchDate() {
   const now = new Date();
 
-  // Salı gününe kadar olan gün farkını bul (Pazar=0, Pazartesi=1, Salı=2, ...)
-  let daysUntilTuesday = (2 - now.getDay() + 7) % 7;
+  // Cuma gününe kadar olan gün farkını bul (Pazar=0, Pazartesi=1, Salı=2, Çarşamba=3, Perşembe=4, Cuma=5, Cumartesi=6)
+  let daysUntilFriday = (5 - now.getDay() + 7) % 7;
 
-  if (daysUntilTuesday === 0) {
-    daysUntilTuesday = 7;
+  if (daysUntilFriday === 0) {
+    daysUntilFriday = 7;
   }
 
   const target = new Date(now);
-  target.setDate(now.getDate() + daysUntilTuesday);
+  target.setDate(now.getDate() + daysUntilFriday);
   target.setHours(0, 0, 0, 0);
   return target;
 }
